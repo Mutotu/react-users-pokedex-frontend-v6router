@@ -1,7 +1,7 @@
 import AllPokemon from './pages/AllPokemon'
 import FavPokemon from './pages/FavPokemon'
 import Navbar from './components/Navbar'
-import {Route} from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import './App.css';
 import axios from 'axios'
 import {useState, useEffect} from 'react'
@@ -72,26 +72,28 @@ function App() {
   return (
     <div className="App">
       <Navbar />
-      <Route 
-        exact path = "/"
-        render={() => 
-          <AllPokemon
-          savePokemon = {savePokemon} 
+      <Routes>
+        <Route 
+          path = "/"
+          element={
+            <AllPokemon
+            savePokemon = {savePokemon} 
+            isFave = {isFave}
+            deletePokemon ={deletePokemon}
+            />
+          }
+        />
+        <Route 
+        path = "/favorites"
+        element={
+          <FavPokemon 
+          favPokemon ={favPokemon}
           isFave = {isFave}
           deletePokemon ={deletePokemon}
           />
-        }
-      />
-      <Route 
-      exact path = "/favorites"
-      render={() => 
-        <FavPokemon 
-        favPokemon ={favPokemon}
-        isFave = {isFave}
-        deletePokemon ={deletePokemon}
+          }
         />
-        }
-      />
+      </Routes>
       
     </div>
   );
