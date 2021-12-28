@@ -13,7 +13,7 @@ function App() {
   const [favPokemonNames, setFavPokemonNames] = useState([]);
   const [user, setUser] = useState({});
 
-  const fetcUser = () => {
+  const fetchUser = () => {
     const userId = localStorage.getItem("userId");
     if (userId) {
       // console.log(localStorage.getItem("userId"));
@@ -25,18 +25,19 @@ function App() {
           },
         })
         .then((response) => {
-          console.log(response);
           setUser(response.data.user);
+          fetchSavedPokemon();
         });
     }
   };
 
-  useEffect(fetcUser, []);
   // fetch saved pokemon from the database function
   const fetchSavedPokemon = async () => {
     if (localStorage.userId) {
       try {
-        let response = await axios.get("http://localhost:3001/favPokemon");
+        let response = await axios.get(
+          `http://localhost:3001/favPokemon/${localStorage.userId}`
+        );
         // console.log(response);
         // assign to state of favPokemon
         setFavPokemon(response.data.favPokemon);
@@ -59,9 +60,6 @@ function App() {
 
   // ONLY when the app loads fetch all saved pokemon
   // will not update saved pokemon everytime you save one!!!
-  useEffect(() => {
-    fetchSavedPokemon();
-  }, []);
 
   const savePokemon = async (pokemonName) => {
     if (localStorage.userId) {
@@ -92,13 +90,18 @@ function App() {
       let res = await axios.delete(
         `http://localhost:3001/favPokemon/${pokemonName}`
       );
-      console.log(res);
+      // console.log(res);
       fetchSavedPokemon();
     } catch (error) {
       console.log(error);
     }
   };
-
+  useEffect(() => {
+    fetchUser();
+  }, []);
+  useEffect(() => {
+    fetchSavedPokemon();
+  }, [localStorage.userId]);
   return (
     <div className='App'>
       <Navbar

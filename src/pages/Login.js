@@ -11,6 +11,7 @@ const Login = (props) => {
     e.preventDefault();
     // console.log(env);
     // console.log(email);
+
     axios
       .post(`http://localhost:3001/user/login`, {
         // .post(`${env.BACKEND_URL}/user/login`, {
@@ -19,7 +20,16 @@ const Login = (props) => {
       })
       .then((response) => {
         if (response.data) {
-          localStorage.setItem("userId", response.data.foundUser.id);
+          console.log(response.data);
+          localStorage.setItem("userId", response.data.user.id);
+
+          // headers: {
+          //   authorization: localStorage.setItem(
+          //     "userId",
+          //     response.data.foundUser.id
+          //   );
+          // }
+
           props.setUser(response.data);
           navigation("/");
         }
